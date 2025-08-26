@@ -1,1 +1,1 @@
-![Logo](./AWX.png)
+![Logo](./icon/AWX.png)
