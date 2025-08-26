@@ -1,0 +1,22 @@
+---
+- name: Tworzenie pliku txt vault na serwerze Linux lab-server
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Wczytaj plik vaulta
+      include_vars:
+        file: /home/ubuntu/secret.yml
+        name: vault_data
+
+    - name: Wyświetl odszyfrowane dane z vaulta
+      debug:
+        var: vault_data
+
+    - name: Utwórz plik /home/ubuntu/test_vault.txt z odszyfrowaną zawartością
+      copy:
+        dest: /home/ubuntu/test_vault.txt
+        content: "{{ vault_data | to_nice_yaml(indent=2) }}"
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
