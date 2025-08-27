@@ -1,0 +1,110 @@
+---
+- name: Install AWX on K3s
+  hosts: all
+  become: true
+  vars:
+    k3s_config: /etc/rancher/k3s/k3s.yaml
+    awx_namespace: awx
+    awx_operator_version: "2.19.1"
+    awx_nodeport: 32000
+
+  tasks:
+    - name: Update system packages
+      apt:
+        update_cache: yes
+        upgrade: dist
+
+    - name: Install k3s
+      shell: curl -sfL https://get.k3s.io | sh -
+      args:
+        creates: /usr/local/bin/k3s
+
+    - name: Ensure kubeconfig is owned by current user
+      file:
+        path: "{{ k3s_config }}"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0644'
+
+    - name: Export KUBECONFIG permanently
+      lineinfile:
+        path: /home/{{ ansible_user }}/.bashrc
+        line: "export KUBECONFIG={{ k3s_config }}"
+        create: yes
+
+    - name: Download and install Kustomize
+      shell: |
+        curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+        mv kustomize /usr/local/bin/
+      args:
+        creates: /usr/local/bin/kustomize
+
+    - name: Create AWX deploy directory
+      file:
+        path: /home/{{ ansible_user }}/awx-deploy
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Create kustomization.yaml
+      copy:
+        dest: /home/{{ ansible_user }}/awx-deploy/kustomization.yaml
+        content: |
+          apiVersion: kustomize.config.k8s.io/v1beta1
+          kind: Kustomization
+          resources:
+            - github.com/ansible/awx-operator/config/default?ref={{ awx_operator_version }}
+
+          images:
+            - name: quay.io/ansible/awx-operator
+              newTag: {{ awx_operator_version }}
+
+          namespace: {{ awx_namespace }}
+
+    - name: Apply Kustomize configuration
+      shell: kubectl apply -k .
+      args:
+        chdir: /home/{{ ansible_user }}/awx-deploy
+
+    - name: Wait for AWX operator pod to be running
+      shell: kubectl wait --for=condition=Available --timeout=600s deployment/awx-operator-controller-manager -n {{ awx_namespace }}
+
+    - name: Create AWX instance definition
+      copy:
+        dest: /home/{{ ansible_user }}/awx-deploy/awx-demo.yaml
+        content: |
+          ---
+          apiVersion: awx.ansible.com/v1beta1
+          kind: AWX
+          metadata:
+            name: awx-demo
+          spec:
+            service_type: nodeport
+            nodeport_port: {{ awx_nodeport }}
+
+    - name: Update kustomization.yaml with AWX instance
+      lineinfile:
+        path: /home/{{ ansible_user }}/awx-deploy/kustomization.yaml
+        insertafter: "resources:"
+        line: "  - awx-demo.yaml"
+        state: present
+
+    - name: Reapply Kustomize configuration
+      shell: kubectl apply -k .
+      args:
+        chdir: /home/{{ ansible_user }}/awx-deploy
+
+    - name: Wait for AWX pods to be ready
+      shell: kubectl wait --for=condition=Ready pod -l "app.kubernetes.io/managed-by=awx-operator" -n {{ awx_namespace }} --timeout=900s
+
+    - name: Get AWX admin password
+      shell: kubectl get secret awx-demo-admin-password -n {{ awx_namespace }} -o jsonpath='{.data.password}' | base64 --decode
+      register: awx_password
+
+    - name: Show AWX access info
+      debug:
+        msg: |
+          AWX is ready! 🚀
+          URL: http://{{ ansible_host }}:{{ awx_nodeport }}
+          Username: admin
+          Password: {{ awx_password.stdout }}
