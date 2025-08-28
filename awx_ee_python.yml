@@ -1,0 +1,14 @@
+---
+- name: Sprawdzenie wersji Pythona w AWX EE
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Sprawdź python3 --version
+      ansible.builtin.command: python3 --version
+      register: python_version
+      ignore_errors: yes
+
+    - name: Pokaż wynik
+      ansible.builtin.debug:
+        msg: "Wersja Pythona w EE: {{ python_version.stdout | default('Brak Pythona') }}"
