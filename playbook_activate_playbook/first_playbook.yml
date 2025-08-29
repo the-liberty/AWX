@@ -4,4 +4,4 @@
   gather_facts: false
 
 - name: Importuj drugi playbook
-  import_playbook: second_playbook.yaml
+  import_playbook: second_playbook.yml
