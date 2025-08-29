@@ -10,7 +10,6 @@
         user: "admin"
         password: "19091974"
         force_basic_auth: yes
-        status_code: 201
         body_format: json
         headers:
           Content-Type: "application/json"
