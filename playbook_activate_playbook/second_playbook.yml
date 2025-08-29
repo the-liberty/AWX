@@ -1,5 +1,4 @@
 ---
-# second_playbook.yml
 - name: Utwórz plik /home/ubuntu/test.txt
   copy:
     dest: /home/ubuntu/test.txt
