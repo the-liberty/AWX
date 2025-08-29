@@ -6,6 +6,6 @@
     - name: Import tasks
       import_tasks: second_playbook.yml
 
-    - name: Dummy task
-      command: "true"
-      notify: Create file
+    - name: Check Python version
+      command: python3 --version
+      register: result
