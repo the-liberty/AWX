@@ -1,8 +1,0 @@
----
-- name: Utwórz plik /home/ubuntu/test.txt
-  copy:
-    dest: /home/ubuntu/test.txt
-    content: "Hello world! \n"
-    owner: ubuntu
-    group: ubuntu
-    mode: '0644'
