@@ -1,5 +1,5 @@
 ---
-- name: Tworzenie pliku txt na serwerze Linux
+- name: second_playbook.yml
   hosts: all
   become: true
 

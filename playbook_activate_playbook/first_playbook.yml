@@ -3,14 +3,5 @@
   hosts: all
   gather_facts: false
 
-  tasks:
-    - name: Import tasks
-      import_tasks: second_playbook.yml
-
-    - name: Check Python version
-      command: python3 --version
-      register: result
-
-    - name: Show Python version
-      debug:
-        msg: "{{ result.stdout }}"
+- name: Importuj drugi playbook
+  import_playbook: second_playbook.yaml
