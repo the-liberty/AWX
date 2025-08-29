@@ -1,9 +1,11 @@
 ---
-- name: Trigger an imported (static) handler
+- name: first_playbook.yml
   hosts: all
-  handlers:
-    - name: Create file
-      import_tasks: second_playbook.yml
+
   tasks:
-    - command: "true"
-      notify: Utwórz plik /home/ubuntu/test.txt
+    - name: Import tasks
+      import_tasks: second_playbook.yml
+
+    - name: Dummy task
+      command: "true"
+      notify: Create file

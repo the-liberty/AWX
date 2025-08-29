@@ -1,13 +1,9 @@
 ---
-- name: Tworzenie pliku txt na serwerze Linux
-  hosts: all
-  become: true
-
-  tasks:
-    - name: Utwórz plik /home/ubuntu/test.txt
-      copy:
-        dest: /home/ubuntu/test.txt
-        content: "Hello world \n"
-        owner: ubuntu
-        group: ubuntu
-        mode: '0644'
+# second_playbook.yml
+- name: Utwórz plik /home/ubuntu/test.txt
+  copy:
+    dest: /home/ubuntu/test.txt
+    content: "Hello world \n"
+    owner: ubuntu
+    group: ubuntu
+    mode: '0644'
