@@ -9,3 +9,6 @@
     - name: Check Python version
       command: python3 --version
       register: result
+
+    - debug:
+      var: result.stdout
