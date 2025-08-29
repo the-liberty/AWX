@@ -1,6 +1,8 @@
 ---
 - name: first_playbook.yml
   hosts: all
+  gather_facts: false
+
 
   tasks:
     - name: Import tasks
@@ -10,5 +12,6 @@
       command: python3 --version
       register: result
 
-    - debug:
-      var: result.stdout
+    - name: Show Python version
+      debug:
+        msg: "{{ result.stdout }}"
