@@ -6,4 +6,4 @@
       import_tasks: second_playbook.yml
   tasks:
     - command: "true"
-      notify: Tworzenie pliku txt na serwerze Linux
+      notify: Utwórz plik /home/ubuntu/test.txt
