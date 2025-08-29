@@ -1,0 +1,9 @@
+---
+- name: Trigger an imported (static) handler
+  hosts: all
+  handlers:
+    - name: Create file
+      import_tasks: second_playbook.yml
+  tasks:
+    - command: "true"
+      notify: Tworzenie pliku txt na serwerze Linux
