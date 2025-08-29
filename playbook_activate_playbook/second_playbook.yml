@@ -7,7 +7,7 @@
       debug:
         msg: "second_playbook.yml został uruchomiony!"
 
-    - name: Create a file as an example
+    - name: utworzyć plik .txt 
       file:
         path: /home/ubuntu/second_playbook_runned.txt
         state: touch

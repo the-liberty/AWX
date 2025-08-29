@@ -3,24 +3,15 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: Print message
-      debug:
-        msg: "first_playbook.yml uruchomiony!"
-
-    - name: second_playbook.yml via AWX API
+    - name: second_playbook.yml przez AWX API
       uri:
         url: "https://formerly-select-lizard.ngrok-free.app/api/v2/job_templates/11/launch/"
         method: POST
         user: "admin"
         password: "19091974"
         force_basic_auth: yes
-        status_code: 201
-        body_format: json
-        headers:
-          Content-Type: "application/json"
-        body: "{}"
       register: result
 
-    - name: Show API call result
+    - name: Wynik second_playbook.yml przez AWX API
       debug:
         var: result
