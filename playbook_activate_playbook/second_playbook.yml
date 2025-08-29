@@ -1,13 +1,13 @@
 ---
 - name: second_playbook.yml
   hosts: all
-  become: true
-
+  gather_facts: false
   tasks:
-    - name: Utwórz plik /home/ubuntu/test.txt
-      copy:
-        dest: /home/ubuntu/test.txt
-        content: "Hello world \n"
-        owner: ubuntu
-        group: ubuntu
-        mode: '0644'
+    - name: Print message
+      debug:
+        msg: "second_playbook.yml został uruchomiony!"
+
+    - name: Create a file as an example
+      file:
+        path: /home/ubuntu/second_playbook_runned.txt
+        state: touch
