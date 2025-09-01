@@ -1,5 +1,5 @@
 - name: create-workflow-template-from-existing.yml
-  hosts: all
+  hosts: localhost
   gather_facts: false
   tasks:
     - name: Create workflow job template in AWX

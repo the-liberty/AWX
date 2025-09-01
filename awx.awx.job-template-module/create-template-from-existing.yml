@@ -1,13 +1,13 @@
 - name: create_template_from_existing.yml
-  hosts: all
+  hosts: localhost
   gather_facts: false
   tasks:
     - name: Copy Job Template
       job_template:
-        name: copy job template
+        name: copy-show-neofetch-info.yml --- playbook--- template
         copy_from: show-neofetch-info.yml --- playbook--- template
         job_type: "run"
-        inventory: Copy show-neofetch-info.yml --- playbook--- template
-        project: test
-        playbook: playbook/show-neofetch-info.yml
+        inventory: Lab Inventory
+        project: GitHub Project
+        playbook: show-neofetch-info.yml
         state: "present"
