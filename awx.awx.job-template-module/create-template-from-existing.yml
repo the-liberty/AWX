@@ -13,7 +13,7 @@
 
   tasks:
     - name: Get project ID
-      project:
+      awx.awx.project_info:
         host: "{{ awx_host }}"
         username: "{{ awx_username }}"
         password: "{{ awx_password }}"
@@ -22,10 +22,10 @@
     - name: Fail if project not found
       fail:
         msg: "Project '{{ project_name }}' not found in AWX"
-      when: project_info.projects | selectattr('name','equalto',project_name) | list | length == 0
+      when: project_info.projects | selectattr('name', 'equalto', project_name) | list | length == 0
 
     - name: Get inventory ID
-      inventory:
+      awx.awx.inventory_info:
         host: "{{ awx_host }}"
         username: "{{ awx_username }}"
         password: "{{ awx_password }}"
@@ -34,10 +34,10 @@
     - name: Fail if inventory not found
       fail:
         msg: "Inventory '{{ inventory_name }}' not found in AWX"
-      when: inventory_info.inventories | selectattr('name','equalto',inventory_name) | list | length == 0
+      when: inventory_info.inventories | selectattr('name', 'equalto', inventory_name) | list | length == 0
 
     - name: Create job template
-      job_template:
+      awx.awx.job_template:
         host: "{{ awx_host }}"
         username: "{{ awx_username }}"
         password: "{{ awx_password }}"
