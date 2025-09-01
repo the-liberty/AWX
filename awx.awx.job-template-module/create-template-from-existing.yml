@@ -6,7 +6,7 @@
     - awx.awx
 
   vars:
-    awx_host: "https://formerly-select-lizard.ngrok-free.app/"
+    awx_host: "https://formerly-select-lizard.ngrok-free.app"
     awx_username: "admin"
     awx_password: "19091974"
 
