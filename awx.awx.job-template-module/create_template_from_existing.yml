@@ -1,0 +1,10 @@
+- name: create_template_from_existing.yml
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Create workflow job template in AWX
+      awx.awx.workflow_job_template:
+        name: example-workflow
+        description: created by Ansible Playbook
+        organization: Default
+      register: workflow_template
