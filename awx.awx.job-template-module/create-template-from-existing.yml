@@ -3,7 +3,7 @@
   gather_facts: false
   tasks:
     - name: copy-job-template
-      awx.awx.job_template:
+      job_template:
         name: copy-show-neofetch-info
         copy_from: show-neofetch-info
         job_type: run
