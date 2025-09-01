@@ -1,0 +1,14 @@
+- name: Check if awx.awx collection is installed
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Verify if awx.awx collection is installed
+      ansible.builtin.pip:
+        name: awx.awx
+        state: present
+      check_mode: yes
+      register: pip_check
+
+    - name: Show result
+      debug:
+        var: pip_check
