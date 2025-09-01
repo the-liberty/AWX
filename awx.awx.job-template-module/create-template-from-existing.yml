@@ -3,11 +3,11 @@
   gather_facts: false
   tasks:
     - name: Copy Job Template
-      job_template:
-        name: copy-show-neofetch-info.yml --- playbook--- template
-        copy_from: show-neofetch-info.yml --- playbook--- template
-        job_type: "run"
+      community.general.tower_job_template:
+        name: copy-show-neofetch-info
+        copy_from: show-neofetch-info
+        job_type: run
         inventory: Lab Inventory
         project: GitHub Project
         playbook: show-neofetch-info.yml
-        state: "present"
+        state: present
