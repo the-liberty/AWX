@@ -6,25 +6,35 @@
     awx_host: "https://formerly-select-lizard.ngrok-free.app"
     awx_username: "admin"
     awx_password: "19091974"
-    template_name: "copy-show-neofetch-info.yml --- playbook--- template"
-    project_name: "	GitHub Project"
+    template_name: "copy-show-neofetch-info"
+    project_name: "GitHub Project"
     inventory_name: "lab-server Inventory"
     playbook_name: "playbook/show-neofetch-info.yml"
 
   tasks:
     - name: Get project ID
-      awx.awx.job_template_info:
+      awx.awx.project_info:
         host: "{{ awx_host }}"
         username: "{{ awx_username }}"
         password: "{{ awx_password }}"
       register: project_info
 
+    - name: Fail if project not found
+      fail:
+        msg: "Project '{{ project_name }}' not found in AWX"
+      when: project_info.projects | selectattr('name','equalto',project_name) | list | length == 0
+
     - name: Get inventory ID
-      awx.awx.job_inventory_info:
+      awx.awx.inventory_info:
         host: "{{ awx_host }}"
         username: "{{ awx_username }}"
         password: "{{ awx_password }}"
       register: inventory_info
+
+    - name: Fail if inventory not found
+      fail:
+        msg: "Inventory '{{ inventory_name }}' not found in AWX"
+      when: inventory_info.inventories | selectattr('name','equalto',inventory_name) | list | length == 0
 
     - name: Create job template
       awx.awx.job_template:
