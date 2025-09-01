@@ -1,14 +1,13 @@
 ---
-- name: Show neofetch ASCII logo and system info
+- name: show-neofetch-info.yml
   hosts: all
   gather_facts: no
 
   tasks:
-    - name: Run neofetch with ascii logo
-      command: neofetch --ascii --ascii_distro ubuntu
+    - name: Run neofetch command
+      command: neofetch --stdout
       register: neofetch_output
 
-    - name: Display ASCII neofetch in AWX
+    - name: Show neofetch result in AWX output
       debug:
-        msg: |
-          {{ neofetch_output.stdout }}
+        msg: "{{ neofetch_output.stdout }}"
