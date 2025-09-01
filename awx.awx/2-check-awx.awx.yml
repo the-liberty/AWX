@@ -1,0 +1,16 @@
+---
+- name: Test kolekcji awx.awx i połączenia z AWX
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Pobierz metadane kolekcji (sprawdza, że awx.awx jest dostępna)
+      awx.awx.controller_meta:
+      register: meta
+
+    - name: Pokaż informacje o kolekcji
+      ansible.builtin.debug:
+        var: meta
+
+    - name: Ping API kontrolera (sprawdza połączenie i autoryzację)
+      ansible.builtin.debug:
+        msg: "{{ lookup(meta.prefix + '.controller_api', 'ping') }}"
