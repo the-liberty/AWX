@@ -3,7 +3,7 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: Print message
+    - name: Wiadomość
       debug:
         msg: "second_playbook.yml został uruchomiony!"
 
