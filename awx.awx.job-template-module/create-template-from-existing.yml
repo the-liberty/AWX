@@ -13,21 +13,21 @@
 
   tasks:
     - name: Get project ID
-      awx.awx.tower_project_info:
+      awx.awx.job_template_info:
         host: "{{ awx_host }}"
         username: "{{ awx_username }}"
         password: "{{ awx_password }}"
       register: project_info
 
     - name: Get inventory ID
-      awx.awx.tower_inventory_info:
+      awx.awx.job_inventory_info:
         host: "{{ awx_host }}"
         username: "{{ awx_username }}"
         password: "{{ awx_password }}"
       register: inventory_info
 
     - name: Create job template
-      awx.awx.tower_job_template:
+      awx.awx.job_template:
         host: "{{ awx_host }}"
         username: "{{ awx_username }}"
         password: "{{ awx_password }}"
