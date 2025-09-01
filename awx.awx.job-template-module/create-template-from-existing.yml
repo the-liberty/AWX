@@ -1,48 +1,15 @@
----
-- name: Create AWX Job Template
-  hosts: localhost
-  gather_facts: false
-  vars:
-    awx_host: "https://formerly-select-lizard.ngrok-free.app"
-    awx_username: "admin"
-    awx_password: "19091974"
-    template_name: "copy-show-neofetch-info"
-    project_name: "GitHub Project"
-    inventory_name: "lab-server Inventory"
-    playbook_name: "playbook/show-neofetch-info.yml"
-
-  tasks:
-    - name: Get project ID
-      awx.awx.project_info:
-        host: "{{ awx_host }}"
-        username: "{{ awx_username }}"
-        password: "{{ awx_password }}"
-      register: project_info
-
-    - name: Fail if project not found
-      fail:
-        msg: "Project '{{ project_name }}' not found in AWX"
-      when: project_info.projects | selectattr('name', 'equalto', project_name) | list | length == 0
-
-    - name: Get inventory ID
-      awx.awx.inventory_info:
-        host: "{{ awx_host }}"
-        username: "{{ awx_username }}"
-        password: "{{ awx_password }}"
-      register: inventory_info
-
-    - name: Fail if inventory not found
-      fail:
-        msg: "Inventory '{{ inventory_name }}' not found in AWX"
-      when: inventory_info.inventories | selectattr('name', 'equalto', inventory_name) | list | length == 0
-
-    - name: Create job template
-      awx.awx.job_template:
-        host: "{{ awx_host }}"
-        username: "{{ awx_username }}"
-        password: "{{ awx_password }}"
-        name: "{{ template_name }}"
-        project: "{{ (project_info.projects | selectattr('name','equalto',project_name) | list)[0].id }}"
-        inventory: "{{ (inventory_info.inventories | selectattr('name','equalto',inventory_name) | list)[0].id }}"
-        playbook: "{{ playbook_name }}"
-        state: present
+- name: show-neofetch-info.yml --- playbook--- template
+  hosts: all
+  job_template:
+    name: "show-neofetch-info.yml --- playbook--- template"
+    job_type: "run"
+    organization: "Default"
+    inventory: "	lab-server Inventory"
+    project: "GitHub Project"
+    playbook: "show-neofetch-info.yml"
+    credentials:
+      - "lab-server Credential"
+    state: "present"
+    controller_config_file: "~/tower_cli.cfg"
+    survey_enabled: yes
+    survey_spec: "{{ lookup('file', 'my_survey.json') }}"
