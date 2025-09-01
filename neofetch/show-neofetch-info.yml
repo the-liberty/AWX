@@ -1,0 +1,13 @@
+---
+- name: show-neofetch-info.yml
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Run neofetch command
+      command: neofetch --stdout
+      register: neofetch_output
+
+    - name: Show neofetch result in AWX output
+      debug:
+        msg: "{{ neofetch_output.stdout }}"

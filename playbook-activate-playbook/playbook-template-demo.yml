@@ -3,11 +3,11 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: Wiadomość
+    - name: Notification
       debug:
         msg: "second_playbook.yml został uruchomiony!"
 
-    - name: utworzyć plik .txt 
+    - name: create second_playbook_runned.txt
       file:
         path: /home/ubuntu/second_playbook_runned.txt
         state: touch

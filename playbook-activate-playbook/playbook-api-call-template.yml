@@ -1,5 +1,5 @@
 ---
-- name: first_playbook.yml
+- name: playbook-api-call-template.yml
   hosts: all
   gather_facts: false
   tasks:
