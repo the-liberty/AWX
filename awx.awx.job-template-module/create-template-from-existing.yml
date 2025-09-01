@@ -1,83 +1,38 @@
 ---
-- name: Create Advanced AWX Job Template
+- name: Create AWX Job Template
   hosts: localhost
   gather_facts: false
-  collections:
-    - awx.awx
-
   vars:
     awx_host: "https://formerly-select-lizard.ngrok-free.app"
     awx_username: "admin"
     awx_password: "19091974"
-
-    project_name: "My Project"
-    inventory_name: "My Inventory"
-    credential_name: "My Credential"
-    job_template_name: "Advanced Job Template"
-    playbook_name: "main.yml"
-
-    extra_vars:
-      example_var: "value"
-
-    survey_questions:
-      - question_name: "Enter your value"
-        question_description: "Provide input for variable"
-        required: true
-        variable: "user_input"
-        type: "text"
-        min: 1
-        max: 100
+    template_name: "copy-show-neofetch-info.yml --- playbook--- template"
+    project_name: "	GitHub Project"
+    inventory_name: "lab-server Inventory"
+    playbook_name: "playbook/show-neofetch-info.yml"
 
   tasks:
-    - name: Get Project ID
+    - name: Get project ID
       awx.awx.tower_project_info:
         host: "{{ awx_host }}"
         username: "{{ awx_username }}"
         password: "{{ awx_password }}"
-        name: "{{ project_name }}"
       register: project_info
 
-    - name: Get Inventory ID
+    - name: Get inventory ID
       awx.awx.tower_inventory_info:
         host: "{{ awx_host }}"
         username: "{{ awx_username }}"
         password: "{{ awx_password }}"
-        name: "{{ inventory_name }}"
       register: inventory_info
 
-    - name: Get Credential ID
-      awx.awx.tower_credential_info:
-        host: "{{ awx_host }}"
-        username: "{{ awx_username }}"
-        password: "{{ awx_password }}"
-        name: "{{ credential_name }}"
-      register: credential_info
-
-    - name: Create Job Template
+    - name: Create job template
       awx.awx.tower_job_template:
         host: "{{ awx_host }}"
         username: "{{ awx_username }}"
         password: "{{ awx_password }}"
-        name: "{{ job_template_name }}"
-        project: "{{ project_info.projects[0].id }}"
-        inventory: "{{ inventory_info.inventories[0].id }}"
+        name: "{{ template_name }}"
+        project: "{{ (project_info.projects | selectattr('name','equalto',project_name) | list)[0].id }}"
+        inventory: "{{ (inventory_info.inventories | selectattr('name','equalto',inventory_name) | list)[0].id }}"
         playbook: "{{ playbook_name }}"
-        credential: "{{ credential_info.credentials[0].id }}"
-        extra_vars: "{{ extra_vars }}"
-        limit: "all"
-        verbosity: 2
-        state: present
-      register: job_template_result
-
-    - name: Add Survey to Job Template
-      awx.awx.tower_survey_spec:
-        host: "{{ awx_host }}"
-        username: "{{ awx_username }}"
-        password: "{{ awx_password }}"
-        organization: 1  # ID organizacji, zmień jeśli potrzebne
-        job_template: "{{ job_template_result.id }}"
-        survey_spec:
-          name: "Example Survey"
-          description: "Survey for input variables"
-          questions: "{{ survey_questions }}"
         state: present
