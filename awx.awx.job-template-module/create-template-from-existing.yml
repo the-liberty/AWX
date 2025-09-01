@@ -1,5 +1,6 @@
 - name: show-neofetch-info.yml --- playbook--- template
   hosts: all
+  gather_facts: false
   job_template:
     name: "show-neofetch-info.yml --- playbook--- template"
     job_type: "run"
