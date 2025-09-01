@@ -12,7 +12,7 @@
     playbook_name: "show-neofetch-info.yml"       # Playbook z projektu, który chcesz uruchomić
   tasks:
     - name: Create Job Template
-      awx.awx.tower_job_template:
+      awx.awx.job_template:
         name: "{{ template_name }}"
         playbook: "{{ playbook_name }}"
         inventory: "{{ inventory_name }}"
