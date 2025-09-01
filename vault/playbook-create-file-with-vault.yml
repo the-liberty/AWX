@@ -6,7 +6,7 @@
   tasks:
     - name: Wczytaj plik vaulta
       include_vars:
-        file: secret.yml   # <- plik w repozytorium
+        file: vault-secret.yml   # <- plik w repozytorium
         name: vault_data
 
     - name: Wyświetl odszyfrowane dane z vaulta
