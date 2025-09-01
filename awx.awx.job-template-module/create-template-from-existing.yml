@@ -1,8 +1,8 @@
-- name: create_template_from_existing.yml
+- name: create-template-from-existing.yml
   hosts: localhost
   gather_facts: false
   tasks:
-    - name: Copy Job Template
+    - name: copy-job-template
       community.general.tower_job_template:
         name: copy-show-neofetch-info
         copy_from: show-neofetch-info
