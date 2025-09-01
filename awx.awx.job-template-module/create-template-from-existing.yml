@@ -13,7 +13,7 @@
 
   tasks:
     - name: Get project ID
-      awx.awx.project_info:
+      project:
         host: "{{ awx_host }}"
         username: "{{ awx_username }}"
         password: "{{ awx_password }}"
@@ -25,7 +25,7 @@
       when: project_info.projects | selectattr('name','equalto',project_name) | list | length == 0
 
     - name: Get inventory ID
-      awx.awx.inventory_info:
+      inventory:
         host: "{{ awx_host }}"
         username: "{{ awx_username }}"
         password: "{{ awx_password }}"
@@ -37,7 +37,7 @@
       when: inventory_info.inventories | selectattr('name','equalto',inventory_name) | list | length == 0
 
     - name: Create job template
-      awx.awx.job_template:
+      job_template:
         host: "{{ awx_host }}"
         username: "{{ awx_username }}"
         password: "{{ awx_password }}"
